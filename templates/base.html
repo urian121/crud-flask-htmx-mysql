@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CRUD con Django, HTMX y MySQL" />
+    <meta
+      name="keywords"
+      content="CRUD, HTMX, Django, Python, MySQL, Bootstrap"
+    />
+    <meta name="author" content="Urian Viera - FullStack Developer" />
+    <title>{% block title %}CRUD con Flask - HTMX y MySQL{% endblock %}</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold fs-4" href="/">
+          CRUD con <span class="color_primary">Flask</span> -
+          <span class="color_secondary">HTMX</span> y
+          <span class="color_mysql">MySQL</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="container mt-5 mb-5">
+      <div class="row mb-4">{% block content %}{% endblock %}</div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.5/dist/htmx.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastjs-notifications@1.11.14/toast-notifications.min.js"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+
+    <script>
+      const tables = document.querySelectorAll("table");
+      if (tables.length > 0) {
+        tables.forEach((table) => {
+          const existingTable = $(table).DataTable();
+          if (existingTable) {
+            existingTable.destroy();
+          }
+          $(table).DataTable({
+            pageLength: 8,
+            order: [[0, "desc"]],
+            language: {
+              url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json",
+            },
+            initComplete: function () {
+              console.log("Tabla inicializada correctamente");
+            },
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

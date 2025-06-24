@@ -1,0 +1,51 @@
+<tr id="aspirante_{{ aspirante.id }}">
+  <th class="text-center">{{ aspirante.id }}</th>
+  <td>{{ aspirante.nombre }}</td>
+  <td>{{ aspirante.email }}</td>
+  <td>{{ aspirante.sexo }}</td>
+  <td>{{ aspirante.curso }}</td>
+  <td class="text-center">
+    {% if aspirante.habla_ingles %}
+    <span class="badge text-bg-success">Sí</span>
+    {% else %}
+    <span class="badge text-bg-secondary">No</span>
+    {% endif %}
+  </td>
+  <td>
+    <div class="form-check form-switch">
+      <input type="checkbox" hx-post="{{ url_for('cambiar_estado_aspirante',
+      id=aspirante.id) }}" hx-vals='js:{"aceptado": event.target.checked ? "1" :
+      "0"}' hx-target="#aspirante_{{ aspirante.id }}" hx-trigger="change" hx-swap="outerHTML" class="form-check-input"
+        {% if aspirante.aceptado==1 or aspirante.aceptado==True %}checked{% endif %} />
+
+      <label id="estado_{{ aspirante.id }}">
+        {% if aspirante.aceptado == 1 or aspirante.aceptado == True %}
+        <span class="badge text-bg-success">Aceptado</span>
+        {% else %}
+        <span class="badge text-bg-warning">Rechazado</span>
+        {% endif %}
+      </label>
+    </div>
+  </td>
+  <td>
+    {% if aspirante.created_at %}
+    <!---->
+    {{ aspirante.created_at.strftime('%d-%m-%Y') }}{% endif %}
+  </td>
+  <td>
+    <div class="flex_btns">
+      <a href="#" hx-get="{{ url_for('ver_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
+        hx-swap="innerHTML">
+        <i class="bi bi-box-arrow-up-right"></i>
+      </a>
+      <a href="#" hx-get="{{ url_for('editar_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
+        hx-swap="innerHTML" class="text-warning">
+        <i class="bi bi-pencil-square"></i>
+      </a>
+      <a href="#" hx-get="{{ url_for('eliminar_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
+        hx-swap="innerHTML" class="text-danger">
+        <i class="bi bi-trash"></i>
+      </a>
+    </div>
+  </td>
+</tr>

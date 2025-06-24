@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block title %}Aspirantes{% endblock %}
+<!----->
+{% block content %}
+<div class="col-md-12">
+  <button
+    type="button"
+    hx-get="{{ url_for('modal_add_aspirante') }}"
+    hx-target="#modal_container"
+    hx-trigger="click"
+    class="btn btn-primary float-start mb-1"
+  >
+    Agregar
+    <i class="bi bi-plus-lg fw-bold"></i>
+  </button>
+
+  <!-- Contenedor para el modal -->
+  <div id="modal_container"></div>
+</div>
+
+<div class="col-md-12">
+  <div class="table-responsive">
+    <table class="table table-striped table-hover" id="tabla-aspirante">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Sexo</th>
+          <th>Curso</th>
+          <th>Hablas inglés</th>
+          <th>Estado</th>
+          <th>Fecha creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for aspirante in aspirantes %} {% include 'aspirantes/fila.html' %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

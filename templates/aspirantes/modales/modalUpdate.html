@@ -1,0 +1,176 @@
+<div
+  class="modal fade"
+  id="modal_update_aspirante"
+  tabindex="-1"
+  aria-labelledby="modal_update_aspirante_title"
+  aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-3 opacity-75 text-center">
+          Actualizar datos del aspirante
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form
+          enctype="multipart/form-data"
+          hx-post="{% url 'editar_aspirante' aspirante.id %}"
+          hx-target="#aspirante_{{ aspirante.id }}"
+          hx-swap="outerHTML"
+          hx-on::after-request="
+          if (event.detail.successful) {
+            showToast.success('Aspirante actualizado exitosamente 🎉');
+          } else {
+            showToast.error('Error al actualizar');
+          }">
+          <input type="text" name="id" value="{{ aspirante.id }}" hidden>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="nombre" class="form-label float-start">Nombre</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  class="form-control"
+                  id="nombre"
+                  value="{{ aspirante.nombre }}"
+                  required />
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="email" class="form-label float-start">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  class="form-control"
+              id="email"
+              value="{{ aspirante.email }}"
+              required />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="curso" class="form-label float-start">Curso</label>
+                <select name="curso" id="curso" class="form-select">
+                  <option value="HTMX" {% if aspirante.curso == 'HTMX' %}selected{% endif %}>HTMX</option>
+                  <option value="PHP" {% if aspirante.curso == 'PHP' %}selected{% endif %}>PHP</option>
+                  <option value="JS" {% if aspirante.curso == 'JS' %}selected{% endif %}>JS</option>
+                  <option value="HTML" {% if aspirante.curso == 'HTML' %}selected{% endif %}>HTML</option>
+                  <option value="REACT" {% if aspirante.curso == 'REACT' %}selected{% endif %}>React</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="mb-3 text-start">
+                <label for="sexo" class="form-label">Sexo</label>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="sexo"
+                    id="radioMasculino"
+                    value="Masculino"
+                    {% if aspirante.sexo == 'Masculino' %}checked{% endif %} />
+                <label class="form-check-label" for="radioMasculino">Masculino</label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="sexo"
+                  id="radioFemenino"
+                  value="Femenino"
+                  {% if aspirante.sexo == 'Femenino' %}checked{% endif %} />
+                <label class="form-check-label" for="radioFemenino">Femenino</label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="sexo"
+                  id="radioOtro"
+                  value="Otro"
+                  {% if aspirante.sexo == 'Otro' %}checked{% endif %} />
+                <label class="form-check-label" for="radioOtro">Otro</label>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="mb-3 text-start">
+            <label for="habla_ingles" class="form-label">Hablas inglés</label>
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="habla_ingles"
+                name="habla_ingles"
+                {% if aspirante.habla_ingles %}checked{% endif %} />
+              <label class="form-check-label" for="habla_ingles">Sí</label>
+            </div>
+          </div>
+
+         
+          <div class="row">
+            {% if aspirante.imagen_perfil %}
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="imagen_perfil" class="form-label">Imagen perfil actual</label>
+                <img class="img-fluid rounded" src="{{ aspirante.imagen_perfil.url }}" alt="Imagen perfil" width="100">
+              </div>
+            </div>
+            {% endif %}
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="imagen_perfil" class="form-label">Cargar nueva imagen perfil</label>
+                <input type="file" name="imagen_perfil" class="form-control form-control-sm" id="imagen_perfil" accept="image/*">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            {% if aspirante.archivo_pdf %}
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="archivo_pdf" class="form-label">Archivo PDF</label>
+                <span class="float-start mx-2"><a href="{{ aspirante.archivo_pdf.url }}" target="_blank">Ver archivo</a></span>
+              </div>
+            </div>
+            {% endif %}
+            <div class="col-6">
+              <div class="mb-3">
+                <label for="archivo_pdf" class="form-label">Cargar nuevo archivo PDF</label>
+                <input type="file" name="archivo_pdf" class="form-control form-control-sm" id="archivo_pdf" accept=".pdf">
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal">
+              Cerrar
+              <i class="bi bi-x-lg"></i>
+            </button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+              Actualizar
+              <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

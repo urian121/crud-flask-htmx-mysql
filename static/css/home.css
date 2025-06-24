@@ -1,0 +1,85 @@
+body {
+  background-color: #f0f0f0;
+}
+
+.modal-header h1 {
+  width: 100%;
+  text-align: center;
+}
+
+.color_primary {
+  color: #44b78b;
+}
+
+.color_secondary {
+  color: #8201ff;
+}
+
+.color_mysql {
+  color: #00758f;
+}
+
+.btn {
+  background-color: #44b78b !important;
+  border: 1px solid #44b78b !important;
+}
+
+.btn:hover {
+  opacity: 0.7;
+}
+
+.container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.flex_btns {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Custom modal backdrop style */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.modal-content {
+  border: none !important;
+}
+
+.bi-trash3,
+.bi-plus-lg,
+.bi-arrow-clockwise,
+.bi-box-arrow-up-right {
+  font-size: 20px;
+}
+
+.bi-trash3:hover,
+.bi-arrow-clockwise:hover,
+.bi-box-arrow-up-right:hover {
+  color: #8201ff;
+}
+
+.text-bg-success {
+  background-color: #b466ff !important;
+}
+
+.text-bg-danger {
+  background-color: #ff4545 !important;
+}
+
+.btn i {
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+/** settings DataTables */
+.active > .page-link, .page-link.active{
+  background-color: #44b78b !important;
+  color: #fff !important;
+  border-color: #44b78b !important;
+}
+.page-link{
+  color: #44b78b !important;
+}
