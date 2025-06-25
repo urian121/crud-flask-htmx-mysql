@@ -13,10 +13,15 @@
   </td>
   <td>
     <div class="form-check form-switch">
-      <input type="checkbox" hx-post="{{ url_for('cambiar_estado_aspirante',
-      id=aspirante.id) }}" hx-vals='js:{"aceptado": event.target.checked ? "1" :
-      "0"}' hx-target="#aspirante_{{ aspirante.id }}" hx-trigger="change" hx-swap="outerHTML" class="form-check-input"
-        {% if aspirante.aceptado==1 or aspirante.aceptado==True %}checked{% endif %} />
+      <input type="checkbox" 
+      hx-post="{{ url_for('cambiar_estado_aspirante',
+      id=aspirante.id) }}" 
+      hx-vals='js:{"aceptado": event.target.checked ? "1" : "0"}'
+      hx-target="#aspirante_{{ aspirante.id }}" 
+      hx-trigger="change" 
+      hx-swap="outerHTML" 
+      class="form-check-input"
+      {% if aspirante.aceptado==1 or aspirante.aceptado==True %}checked{% endif %} />
 
       <label id="estado_{{ aspirante.id }}">
         {% if aspirante.aceptado == 1 or aspirante.aceptado == True %}
@@ -38,11 +43,11 @@
         hx-swap="innerHTML">
         <i class="bi bi-box-arrow-up-right"></i>
       </a>
-      <a href="#" hx-get="{{ url_for('editar_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
+      <a href="#" hx-get="{{ url_for('modal_update_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
         hx-swap="innerHTML" class="text-warning">
         <i class="bi bi-pencil-square"></i>
       </a>
-      <a href="#" hx-get="{{ url_for('eliminar_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
+      <a href="#" hx-get="{{ url_for('modal_delete_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
         hx-swap="innerHTML" class="text-danger">
         <i class="bi bi-trash"></i>
       </a>

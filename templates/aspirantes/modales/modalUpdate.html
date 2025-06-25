@@ -16,18 +16,20 @@
           data-bs-dismiss="modal"
           aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
         <form
           enctype="multipart/form-data"
-          hx-post="{% url 'editar_aspirante' aspirante.id %}"
+          hx-post="{{ url_for('actualizar_aspirante', id=aspirante.id) }}"
           hx-target="#aspirante_{{ aspirante.id }}"
           hx-swap="outerHTML"
           hx-on::after-request="
-          if (event.detail.successful) {
-            showToast.success('Aspirante actualizado exitosamente 🎉');
-          } else {
-            showToast.error('Error al actualizar');
-          }">
+            if (event.detail.successful) {
+              showToast.success('Aspirante actualizado exitosamente 🎉');
+              document.getElementById('modal_update_aspirante').style.display = 'none';
+            } else {
+              showToast.error('Error al actualizar');
+            }">
           <input type="text" name="id" value="{{ aspirante.id }}" hidden>
 
           <div class="row">

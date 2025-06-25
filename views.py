@@ -27,6 +27,7 @@ def get_aspirante(id):
     finally:
         conexion.close()
 
+
 def cambiar_estado(id):
     try:
         aceptado = request.form.get('aceptado') == '1'

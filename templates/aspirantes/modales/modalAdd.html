@@ -8,14 +8,18 @@
         </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form method="POST" enctype="multipart/form-data" hx-post="{{ url_for('add_aspirante') }}"
-          hx-target="#tabla-aspirante tbody" hx-swap="beforeend transition:true" hx-on::after-request="
-              if(event.detail.successful){
-                  bootstrap.Modal.getInstance(document.getElementById('modal_add_aspirante')).hide();
-                  this.reset();
-              }">
 
+      <div class="modal-body">
+        <form method="POST" 
+          enctype="multipart/form-data" 
+          hx-post="{{ url_for('add_aspirante') }}"
+          hx-target="#tabla-aspirante tbody" 
+          hx-swap="beforeend transition:true" 
+          hx-on::after-request="
+          if(event.detail.successful){
+              bootstrap.Modal.getInstance(document.getElementById('modal_add_aspirante')).hide();
+              this.reset();
+          }">
           <div class="mb-3">
             <label for="nombre" class="form-label float-start">Nombre completo</label>
             <input type="text" name="nombre" class="form-control" id="nombre" required />
