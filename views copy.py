@@ -1,15 +1,12 @@
 import os
+import time
 from datetime import datetime
 from flask import render_template, request, jsonify
 from config.config import IMAGES_FOLDER, PDFS_FOLDER
 from app import app
 from views import * 
+from config.config import obtener_conexion
 
-# Ruta para la página de inicio
-@app.route('/')
-def home():
-    aspirantes = get_aspirantes()
-    return render_template('aspirantes/index.html', aspirantes=aspirantes)
 
 @app.route('/modal_add_aspirante', methods=['GET'])
 def modal_add_aspirante():
@@ -146,3 +143,51 @@ def eliminar_aspirante(id):
 def cambiar_estado_aspirante(id):
     cambiar_estado(id)
     return '', 200
+
+# Ruta para la página de inicio
+@app.route('/')
+def home():
+    aspirantes = get_aspirantes()
+    return render_template('aspirantes/index.html', aspirantes=aspirantes)
+
+# Lista de aspirantes
+def get_aspirantes():
+    conexion = obtener_conexion()
+    try:
+        with conexion.cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_aspirantes ORDER BY id ASC")
+            aspirantes = cursor.fetchall()
+        return aspirantes 
+    except Exception as e:
+        print(f"Error obteniendo aspirantes: {e}")
+        return "Error al obtener los aspirantes", 500
+    finally:
+        conexion.close()
+
+def get_aspirante(id):
+    conexion = obtener_conexion()
+    try:
+        with conexion.cursor() as cursor:
+            cursor.execute("SELECT * FROM tbl_aspirantes WHERE id = %s", (id,))
+            aspirante = cursor.fetchone()
+        return aspirante
+    except Exception as e:
+        print(f"Error obteniendo aspirante: {e}")
+        return "Error al obtener el aspirante", 500
+    finally:
+        conexion.close()
+
+
+def cambiar_estado(id):
+    try:
+        aceptado = request.form.get('aceptado') == '1'
+        conexion = obtener_conexion()
+        with conexion.cursor() as cursor:
+            cursor.execute("UPDATE tbl_aspirantes SET aceptado = %s WHERE id = %s", (aceptado, id))
+            conexion.commit()
+        return ''
+    except Exception as e:
+        print(f"Error al cambiar estado: {e}")
+        return jsonify({'error': str(e)}), 500
+    finally:
+        conexion.close()
