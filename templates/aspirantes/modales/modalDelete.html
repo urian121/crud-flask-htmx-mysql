@@ -18,24 +18,53 @@
           aria-label="Cerrar"
         ></button>
       </div>
+
       <div class="modal-body">
-        <p>¿Seguro que desea eliminar el aspirante?</p>
+
+      <!-- Spinner fuera del <form> para que no se borre -->
+      <div id="spinnerModal" class="d-flex flex-column align-items-center justify-content-center my-3 d-none">
+        <div class="spinner-border mb-2" role="status"></div>
+        <span class="fs-5">Eliminando...</span>
       </div>
+
+
+      <p id="confirmDelete" class="d-block">¿Seguro que desea eliminar el aspirante?</p>
+      </div>
+
       <div class="modal-footer">
         <button
           type="button"
           class="btn btn-danger"
           hx-post="{{ url_for('eliminar_aspirante', id=aspirante.id) }}"
           hx-target="#modal_container"
-          hx-swap="outerHTML"
+          hx-swap="outerHTML transition:true"
+
+          hx-on::before-request="
+          console.log('Antes de la petición');
+          document.getElementById('spinnerModal').classList.remove('d-none');
+          document.getElementById('confirmDelete').classList.add('d-none');
+          document.querySelector('.modal-footer').classList.add('d-none');
+          "
+
           hx-on::after-request="
-            if (event.detail.successful) {
-              showToast.success('Aspirante eliminado exitosamente 🎉');
-              document.getElementById('aspirante_{{ aspirante.id }}').remove();
-            } else {
-              showToast.error('Error al eliminar');
-            }"
-          data-bs-dismiss="modal">
+          console.log('Después de la petición');
+          document.getElementById('spinnerModal').classList.add('d-none');
+          document.getElementById('confirmDelete').classList.remove('d-none');
+          document.querySelector('.modal-footer').classList.remove('d-none');
+
+          if (event.detail.successful) {
+            console.log('Petición exitosa');
+            showToast.success('Aspirante eliminado exitosamente 🎉');
+            document.getElementById('aspirante_{{ aspirante.id }}')?.remove();
+
+            // Ahora sí, cerrar la modal con JavaScript
+            const modalEl = document.getElementById('modal-delete');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal?.hide();
+          } else {
+            showToast.error('Error al eliminar');
+          }
+        ">
           Eliminar <i class="bi bi-trash3"></i>
         </button>
       </div>

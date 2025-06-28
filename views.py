@@ -18,8 +18,7 @@ def modal_add_aspirante():
 # Agregar un aspirante
 def add_aspirante():
     try:
-        # Pequeña pausa para asegurar que los archivos se guarden completamente
-        time.sleep(0.5)
+        time.sleep(0.5) # Pequeña pausa de 0.5 segundos
         
         nombre = request.form.get('nombre')
         email = request.form.get('email')
@@ -69,6 +68,7 @@ def modal_update_aspirante(id):
 # Actualizar un aspirante
 def actualizar_aspirante(id):
     try:
+        time.sleep(0.5) # Pequeña pausa de 0.5 segundos
         nombre = request.form.get('nombre')
         email = request.form.get('email')
         sexo = request.form.get('sexo')
@@ -127,6 +127,8 @@ def modal_delete_aspirante(id):
 # Eliminar un aspirante
 def eliminar_aspirante(id):
     try:
+        # Pequeña pausa para asegurar que los archivos se guarden completamente
+        time.sleep(0.5) # Pequeña pausa de 0.5 segundos
         conexion = obtener_conexion()
         with conexion.cursor() as cursor:
             cursor.execute("DELETE FROM tbl_aspirantes WHERE id = %s", (id,))

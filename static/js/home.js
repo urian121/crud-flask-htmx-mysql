@@ -10,15 +10,41 @@ htmx.on("htmx:afterSwap", function(evt) {
     }
 });
 
+/**
+ * Manejar eventos antes de enviar un formulario
+ */
+htmx.on("htmx:before-request", (event) => {
+    const modal = event.target.closest(".modal");
+    if (!modal) return; // Si no hay un modal, no hacer nada
 
-// evento que se dispara después de que HTMX ha completado completamente una solicitud HTTP.
+    const modalId = modal.id;
+    if (modalId !== "modal_add_aspirante" && modalId !== "modal_update_aspirante") return; // Si no es el modal de agregar o actualizar, no hacer nada
+
+    document.getElementById("spinnerModal")?.classList.remove("d-none");
+    modal.querySelector("form")?.classList.add("d-none");
+});
+
+/**
+ * Manejar eventos después de enviar un formulario
+ */
 htmx.on("htmx:after-request", (event) => {
-    if (event.target.closest("#modal_add_aspirante form")) {
+    const modal = event.target.closest(".modal");
+    if (!modal) return; // Si no hay un modal, no hacer nada
+
+    const modalId = modal.id;
+    if (modalId !== "modal_add_aspirante" && modalId !== "modal_update_aspirante") return; // Si no es el modal de agregar o actualizar, no hacer nada
+
+    document.getElementById("spinnerModal")?.classList.add("d-none");
+    modal.querySelector("form")?.classList.remove("d-none");
+
     if (event.detail.successful) {
-        bootstrap.Modal.getInstance(document.getElementById("modal_add_aspirante")).hide();
-        showToast.success("Aspirante agregado exitosamente 🎉");
+        const msg = modalId === "modal_add_aspirante"
+            ? "Aspirante agregado exitosamente 🎉"
+            : "Aspirante actualizado exitosamente 🎉";
+
+        showToast.success(msg);
+        bootstrap.Modal.getInstance(modal)?.hide();
     } else {
-        showToast.error("Error al agregar");
-    }
+        showToast.error("Error al procesar los datos");
     }
 });

@@ -1,5 +1,5 @@
 body {
-  background-color: #f0f0f0;
+  background-color: #f6eede;
 }
 
 .modal-header h1 {
@@ -29,6 +29,7 @@ body {
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
+  box-shadow: 0px 9px 20px rgba(46, 35, 94, 0.07);
 }
 
 .flex_btns {

@@ -18,20 +18,19 @@
       </div>
 
       <div class="modal-body">
+
+        <!-- Spinner -->
+        <div id="spinnerModal" class="d-flex flex-column align-items-center justify-content-center my-3 d-none">
+          <div class="spinner-border mb-2" role="status"></div>
+          <span class="fs-5">Actualizando datos...</span>
+        </div>
+
         <form
+        id="formUpdate"
           enctype="multipart/form-data"
           hx-post="{{ url_for('actualizar_aspirante', id=aspirante.id) }}"
           hx-target="#aspirante_{{ aspirante.id }}"
-          hx-swap="outerHTML"
-          hx-on::after-request="
-            if (event.detail.successful) {
-              showToast.success('Aspirante actualizado exitosamente 🎉');
-              document.getElementById('modal_update_aspirante').style.display = 'none';
-            } else {
-              showToast.error('Error al actualizar');
-            }">
-          <input type="text" name="id" value="{{ aspirante.id }}" hidden>
-
+          hx-swap="outerHTML transition:true">
           <div class="row">
             <div class="col-6">
               <div class="mb-3">
@@ -169,7 +168,7 @@
               Cerrar
               <i class="bi bi-x-lg"></i>
             </button>
-            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">
+            <button type="submit" class="custom_btn btn btn-primary">
               Actualizar
               <i class="bi bi-arrow-right"></i>
             </button>

@@ -10,16 +10,20 @@
       </div>
 
       <div class="modal-body">
-        <form method="POST" 
+
+        <!-- Spinner -->
+        <div id="spinnerModal" class="d-flex flex-column align-items-center justify-content-center my-3 d-none">
+          <div class="spinner-border mb-2" role="status"></div>
+          <span class="fs-5">Enviando formulario...</span>
+        </div>
+
+
+        <form method="POST"
+          id="formAdd"
           enctype="multipart/form-data" 
           hx-post="{{ url_for('add_aspirante') }}"
           hx-target="#tabla-aspirante tbody" 
-          hx-swap="beforeend transition:true" 
-          hx-on::after-request="
-          if(event.detail.successful){
-              bootstrap.Modal.getInstance(document.getElementById('modal_add_aspirante')).hide();
-              this.reset();
-          }">
+          hx-swap="beforeend transition:true">
           <div class="mb-3">
             <label for="nombre" class="form-label float-start">Nombre completo</label>
             <input type="text" name="nombre" class="form-control" id="nombre" required />
@@ -83,11 +87,11 @@
             </div>
 
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <button type="button" class="btn btn-secondary">
                 Cerrar
                 <i class="bi bi-x-lg"></i>
               </button>
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="custom_btn btn btn-primary">
                 Registrar nuevo Aspirante
                 <i class="bi bi-arrow-right"></i>
               </button>

@@ -2,7 +2,7 @@
 
 Este proyecto es un CRUD completo de aspirantes usando Flask, HTMX para interactividad sin recarga, y MySQL como base de datos. A continuación te explico brevemente la función de cada archivo principal.
 
----
+![image](https://raw.githubusercontent.com/urian121/imagenes-proyectos-github/refs/heads/master/crud-flask-htmx-mysql.gif)
 
 ## 📁 app.py
 
@@ -14,7 +14,6 @@ Archivo principal que:
 - Maneja errores 404 mostrando una plantilla personalizada.
 - Inicia el servidor en modo desarrollo (`debug=True`, puerto `8500`).
 
----
 
 ## 📁 router.py
 
@@ -25,7 +24,6 @@ Rutas incluidas:
 - Crear, ver, actualizar, eliminar y cambiar estado de aspirantes
 - Rutas de modales usadas con HTMX (`modal_add_aspirante`, etc.)
 
----
 
 ## 📁 views.py
 
@@ -38,7 +36,6 @@ Contiene la lógica de cada vista o funcionalidad:
 - `cambiar_estado_aspirante`: activa o desactiva un aspirante.
 - Funciones auxiliares como `get_aspirante()` o `get_aspirantes()` para interactuar con la base de datos.
 
----
 
 ## 📁 config/config.py *(no incluido aquí)*
 
@@ -47,11 +44,10 @@ Debe contener:
 - Rutas como `IMAGES_FOLDER` y `PDFS_FOLDER`.
 - Función `obtener_conexion()` para conectarse a la DB.
 
----
 
-## 💡 Extras
+## 🙌 Cómo puedes apoyar 📢:
 
-- Los archivos subidos (imagen y PDF) se guardan en `static/images/` y `static/pdfs/`.
-- Las vistas usan modales renderizados con Jinja y cargados dinámicamente con HTMX.
-- Las rutas POST devuelven respuestas vacías (`''`) para trabajar con HTMX.
+✨ **Comparte este proyecto** con otros desarrolladores para que puedan beneficiarse 📢.
 
+☕ **Invítame un café o una cerveza 🍺**:
+   - [Paypal](https://www.paypal.me/iamdeveloper86) (`iamdeveloper86@gmail.com`).

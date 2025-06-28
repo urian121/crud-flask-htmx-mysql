@@ -23,6 +23,5 @@
     z-index: 2;
   }
   #spinnerModal span {
-    color: #0d6efd; /* Azul Bootstrap, o cambia por cualquier color que desees */
-    font-weight: 500; /* Opcional: hace que se vea un poco más fuerte */
+    font-weight: 500;
   }
