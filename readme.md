@@ -37,17 +37,16 @@ Contiene la lógica de cada vista o funcionalidad:
 - Funciones auxiliares como `get_aspirante()` o `get_aspirantes()` para interactuar con la base de datos.
 
 
-## 📁 config/config.py *(no incluido aquí)*
-
-Debe contener:
-- Credenciales de conexión a MySQL.
-- Rutas como `IMAGES_FOLDER` y `PDFS_FOLDER`.
-- Función `obtener_conexion()` para conectarse a la DB.
-
-
 ## 🙌 Cómo puedes apoyar 📢:
 
 ✨ **Comparte este proyecto** con otros desarrolladores para que puedan beneficiarse 📢.
 
 ☕ **Invítame un café o una cerveza 🍺**:
    - [Paypal](https://www.paypal.me/iamdeveloper86) (`iamdeveloper86@gmail.com`).
+
+### ⚡ ¡No olvides SUSCRIBIRTE a la [Comunidad WebDeveloper](https://www.youtube.com/WebDeveloperUrianViera?sub_confirmation=1)!
+
+
+#### ⭐ **Déjanos una estrella en GitHub**:
+   - Dicen que trae buena suerte 🍀.
+**Gracias por tu apoyo 🤓.**
