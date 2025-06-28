@@ -55,6 +55,3 @@ Debe contener:
 - Las vistas usan modales renderizados con Jinja y cargados dinámicamente con HTMX.
 - Las rutas POST devuelven respuestas vacías (`''`) para trabajar con HTMX.
 
----
-
-> Cualquier duda o mejora, puedes abrir un issue o colaborar. ¡Happy hacking!

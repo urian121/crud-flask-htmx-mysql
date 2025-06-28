@@ -3,7 +3,7 @@ from pymysql.cursors import DictCursor
 import os
 
 # Rutas para archivos
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
 IMAGES_FOLDER = os.path.join(UPLOAD_FOLDER, 'images')
 PDFS_FOLDER = os.path.join(UPLOAD_FOLDER, 'pdfs')
 

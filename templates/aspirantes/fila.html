@@ -37,20 +37,26 @@
     <!---->
     {{ aspirante.created_at.strftime('%d-%m-%Y') }}{% endif %}
   </td>
-  <td>
-    <div class="flex_btns">
-      <a href="#" hx-get="{{ url_for('ver_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
-        hx-swap="innerHTML">
+  <td class="d-flex gap-2">
+      <button class="custom_btn btn text-white btn-circle" 
+              hx-get="{{ url_for('ver_aspirante', id=aspirante.id) }}" 
+              hx-target="#modal_container"
+              hx-swap="innerHTML">
         <i class="bi bi-box-arrow-up-right"></i>
-      </a>
-      <a href="#" hx-get="{{ url_for('modal_update_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
-        hx-swap="innerHTML" class="text-warning">
+      </button>
+      
+      <button class="btn btn-warning btn-circle" 
+              hx-get="{{ url_for('modal_update_aspirante', id=aspirante.id) }}" 
+              hx-target="#modal_container"
+              hx-swap="innerHTML">
         <i class="bi bi-pencil-square"></i>
-      </a>
-      <a href="#" hx-get="{{ url_for('modal_delete_aspirante', id=aspirante.id) }}" hx-target="#modal_container"
-        hx-swap="innerHTML" class="text-danger">
+      </button>
+      
+      <button class="btn btn-danger btn-circle" 
+              hx-get="{{ url_for('modal_delete_aspirante', id=aspirante.id) }}" 
+              hx-target="#modal_container"
+              hx-swap="innerHTML">
         <i class="bi bi-trash"></i>
-      </a>
-    </div>
+      </button>
   </td>
 </tr>

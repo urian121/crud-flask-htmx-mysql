@@ -129,7 +129,9 @@
             <div class="col-6">
               <div class="mb-3">
                 <label for="imagen_perfil" class="form-label">Imagen perfil actual</label>
-                <img class="img-fluid rounded" src="{{ aspirante.imagen_perfil.url }}" alt="Imagen perfil" width="100">
+                <a href="/static/uploads/{{ aspirante.imagen_perfil }}" target="_blank">
+                  <img class="img-fluid rounded" src="/static/uploads/{{ aspirante.imagen_perfil }}" alt="Imagen perfil" width="100">
+                </a>
               </div>
             </div>
             {% endif %}
@@ -146,7 +148,8 @@
             <div class="col-6">
               <div class="mb-3">
                 <label for="archivo_pdf" class="form-label">Archivo PDF</label>
-                <span class="float-start mx-2"><a href="{{ aspirante.archivo_pdf.url }}" target="_blank">Ver archivo</a></span>
+                <span class="float-start mx-2"><a href="/static/uploads/{{ aspirante.archivo_pdf }}" target="_blank">Ver archivo</a></span>
+                <iframe src="/static/uploads/{{ aspirante.archivo_pdf }}" width="100%" height="200px"></iframe>
               </div>
             </div>
             {% endif %}

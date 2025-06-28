@@ -6,11 +6,16 @@ from config.config import IMAGES_FOLDER, PDFS_FOLDER
 from views import * 
 from config.config import obtener_conexion
 
+# Ruta de la página principal
+def home():
+    aspirantes = get_aspirantes()
+    return render_template('aspirantes/index.html', aspirantes=aspirantes)
 
+# Modal para agregar un aspirante
 def modal_add_aspirante():
     return render_template('aspirantes/modales/modalAdd.html')
 
-
+# Agregar un aspirante
 def add_aspirante():
     try:
         # Pequeña pausa para asegurar que los archivos se guarden completamente
@@ -27,44 +32,41 @@ def add_aspirante():
         # Manejo de archivos
         imagen_perfil = request.files.get('imagen_perfil')
         archivo_pdf = request.files.get('archivo_pdf')
-        
-        # Generar nombres únicos para los archivos
-        imagen_nombre = f"{nombre.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg"
-        pdf_nombre = f"{nombre.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
-        
-        # Guardar archivos
-        if imagen_perfil:
-            imagen_perfil.save(os.path.join(IMAGES_FOLDER, imagen_nombre))
-        if archivo_pdf:
-            archivo_pdf.save(os.path.join(PDFS_FOLDER, pdf_nombre))
+
+        ruta_imagen = procesar_archivo(imagen_perfil)
+        ruta_pdf = procesar_archivo(archivo_pdf)        
         
         # Almacenar solo las rutas en la base de datos
         conexion = obtener_conexion()
         with conexion.cursor() as cursor:
             cursor.execute("INSERT INTO tbl_aspirantes (nombre, email, sexo, curso, habla_ingles, imagen_perfil, archivo_pdf) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
-                         (nombre, email, sexo, curso, habla_ingles, 
-                          os.path.join('images', imagen_nombre) if imagen_perfil else None,
-                          os.path.join('pdfs', pdf_nombre) if archivo_pdf else None))
+                         (nombre, email, sexo, curso, habla_ingles, ruta_imagen, ruta_pdf))
             conexion.commit()
-        return '', 200
+
+            # Obtener el ID del nuevo aspirante
+            nuevo_id = cursor.lastrowid
+            
+            # Devolver la fila HTML del nuevo aspirante
+            return get_fila_aspirante(nuevo_id)
     except Exception as e:
         print(f"Error al agregar aspirante: {e}")
         return jsonify({'error': str(e)}), 500 
     finally:
         conexion.close()      
 
-
+# Modal para ver un aspirante
 def ver_aspirante(id):
     aspirante = get_aspirante(id)
     return render_template('aspirantes/modales/modalView.html', aspirante=aspirante)
 
+# Modal para actualizar un aspirante
 def modal_update_aspirante(id):
     aspirante = get_aspirante(id)
     if aspirante:
         return render_template('aspirantes/modales/modalUpdate.html', aspirante=aspirante)
     return jsonify({'error': 'Aspirante no encontrado'}), 404
 
-
+# Actualizar un aspirante
 def actualizar_aspirante(id):
     try:
         nombre = request.form.get('nombre')
@@ -78,31 +80,36 @@ def actualizar_aspirante(id):
         imagen_perfil = request.files.get('imagen_perfil')
         archivo_pdf = request.files.get('archivo_pdf')
         
-        # Generar nombres únicos para los archivos
-        imagen_nombre = f"{nombre.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jpg" if imagen_perfil else None
-        pdf_nombre = f"{nombre.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf" if archivo_pdf else None
-        
-        # Guardar archivos si existen
-        if imagen_perfil:
-            imagen_perfil.save(os.path.join(IMAGES_FOLDER, imagen_nombre))
-        if archivo_pdf:
-            archivo_pdf.save(os.path.join(PDFS_FOLDER, pdf_nombre))
-        
         # Actualizar en la base de datos
         conexion = obtener_conexion()
         with conexion.cursor() as cursor:
-            cursor.execute("""
-                UPDATE tbl_aspirantes 
-                SET nombre=%s, email=%s, sexo=%s, curso=%s, habla_ingles=%s,
-                    imagen_perfil=%s, archivo_pdf=%s 
-                WHERE id=%s
-            """, 
-            (nombre, email, sexo, curso, habla_ingles,
-             os.path.join('images', imagen_nombre) if imagen_perfil else None,
-             os.path.join('pdfs', pdf_nombre) if archivo_pdf else None,
-             id))
+            # Base del update
+            sql = """
+                UPDATE tbl_aspirantes SET
+                nombre=%s, email=%s, sexo=%s, curso=%s, habla_ingles=%s
+            """
+            valores = [nombre, email, sexo, curso, habla_ingles]
+
+            # Si existe el archivo imagen_perfil y además tiene nombre (es decir, no está vacío)
+            if imagen_perfil and imagen_perfil.filename:
+                ruta_imagen = procesar_archivo(imagen_perfil)
+                sql += ", imagen_perfil=%s"
+                valores.append(ruta_imagen)
+
+            # Si existe el archivo archivo_pdf y además tiene nombre (es decir, no está vacío)
+            if archivo_pdf and archivo_pdf.filename:
+                ruta_pdf = procesar_archivo(archivo_pdf)
+                sql += ", archivo_pdf=%s"
+                valores.append(ruta_pdf)
+
+            sql += " WHERE id=%s"
+            valores.append(id)
+
+            cursor.execute(sql, valores)
             conexion.commit()
-        return '', 200
+
+            # Devolver la fila HTML actualizada
+            return get_fila_aspirante(id)
     except Exception as e:
         print(f"Error al actualizar aspirante: {e}")
         return jsonify({'error': str(e)}), 500
@@ -110,20 +117,21 @@ def actualizar_aspirante(id):
         if 'conexion' in locals():
             conexion.close()
 
+# Modal para eliminar un aspirante
 def modal_delete_aspirante(id):
     aspirante = get_aspirante(id)
     if aspirante:
         return render_template('aspirantes/modales/modalDelete.html', aspirante=aspirante)
     return jsonify({'error': 'Aspirante no encontrado'}), 404
 
+# Eliminar un aspirante
 def eliminar_aspirante(id):
-    print('Llegando a eliminar aspirante con ID:', id)
     try:
         conexion = obtener_conexion()
         with conexion.cursor() as cursor:
             cursor.execute("DELETE FROM tbl_aspirantes WHERE id = %s", (id,))
             conexion.commit()
-        return '', 200
+        return '', 204 # Devolver 204 No Content para indicar éxito
     except Exception as e:
         print(f"Error al eliminar aspirante: {e}")
         return jsonify({'error': str(e)}), 500
@@ -131,16 +139,22 @@ def eliminar_aspirante(id):
         if 'conexion' in locals():
             conexion.close()
 
+# Cambiar el estado de un aspirante
 def cambiar_estado_aspirante(id):
-    cambiar_estado(id)
-    return '', 200
+    try:
+        aceptado = request.form.get('aceptado') == '1'
+        conexion = obtener_conexion()
+        with conexion.cursor() as cursor:
+            cursor.execute("UPDATE tbl_aspirantes SET aceptado = %s WHERE id = %s", (aceptado, id))
+            conexion.commit()
+        return '', 200
+    except Exception as e:
+        print(f"Error al cambiar estado: {e}")
+        return jsonify({'error': str(e)}), 500
+    finally:
+        conexion.close()
 
-
-def home():
-    aspirantes = get_aspirantes()
-    return render_template('aspirantes/index.html', aspirantes=aspirantes)
-
-
+# Obtener todos los aspirantes
 def get_aspirantes():
     conexion = obtener_conexion()
     try:
@@ -154,6 +168,7 @@ def get_aspirantes():
     finally:
         conexion.close()
 
+# Obtener un aspirante por ID
 def get_aspirante(id):
     conexion = obtener_conexion()
     try:
@@ -167,17 +182,22 @@ def get_aspirante(id):
     finally:
         conexion.close()
 
+# Función para procesar archivos
+def procesar_archivo(archivo):
+    if archivo:
+        extension = archivo.filename.rsplit('.', 1)[-1].lower()
+        carpeta = PDFS_FOLDER if extension == 'pdf' else IMAGES_FOLDER
 
-def cambiar_estado(id):
-    try:
-        aceptado = request.form.get('aceptado') == '1'
-        conexion = obtener_conexion()
-        with conexion.cursor() as cursor:
-            cursor.execute("UPDATE tbl_aspirantes SET aceptado = %s WHERE id = %s", (aceptado, id))
-            conexion.commit()
-        return ''
-    except Exception as e:
-        print(f"Error al cambiar estado: {e}")
-        return jsonify({'error': str(e)}), 500
-    finally:
-        conexion.close()
+        nombre_archivo = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.{extension}"
+        ruta_completa = os.path.join(carpeta, nombre_archivo)
+
+        archivo.save(ruta_completa)
+
+        return os.path.join(os.path.basename(carpeta), nombre_archivo)
+    return None
+
+
+# Obtiene la fila HTML para un aspirante específico
+def get_fila_aspirante(id):
+    aspirante = get_aspirante(id)
+    return render_template('aspirantes/fila.html', aspirante=aspirante)
